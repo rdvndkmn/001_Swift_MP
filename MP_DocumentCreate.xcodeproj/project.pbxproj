@@ -22,6 +22,11 @@
 		EC0B1FC02AD6C68E00814309 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = EC0B1FBF2AD6C68E00814309 /* FirebaseAuth */; };
 		EC0B1FC22AD6C69600814309 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EC0B1FC12AD6C69600814309 /* FirebaseFirestore */; };
 		EC0B1FC42AD6C69B00814309 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = EC0B1FC32AD6C69B00814309 /* FirebaseStorage */; };
+		EC43C0952AD81771008E8A1A /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C0942AD81771008E8A1A /* ApiManager.swift */; };
+		EC43C0972AD817A3008E8A1A /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C0962AD817A3008E8A1A /* UserService.swift */; };
+		EC43C09A2AD817E5008E8A1A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C0992AD817E5008E8A1A /* User.swift */; };
+		EC43C09D2AD81890008E8A1A /* UploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C09C2AD81890008E8A1A /* UploadViewModel.swift */; };
+		EC43C0A12AD819D0008E8A1A /* UploadViewModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C0A02AD819D0008E8A1A /* UploadViewModelOutput.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +62,11 @@
 		EC0B1FB52AD6C4D600814309 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		EC0B1FB72AD6C50600814309 /* Upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upload.swift; sourceTree = "<group>"; };
 		EC0B1FB92AD6C5AB00814309 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EC43C0942AD81771008E8A1A /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
+		EC43C0962AD817A3008E8A1A /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		EC43C0992AD817E5008E8A1A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		EC43C09C2AD81890008E8A1A /* UploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewModel.swift; sourceTree = "<group>"; };
+		EC43C0A02AD819D0008E8A1A /* UploadViewModelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewModelOutput.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,11 +122,11 @@
 		EC0B1F842AD6C42200814309 /* MP_DocumentCreate */ = {
 			isa = PBXGroup;
 			children = (
-				EC0B1F852AD6C42200814309 /* AppDelegate.swift */,
-				EC0B1F872AD6C42200814309 /* SceneDelegate.swift */,
-				EC0B1F892AD6C42200814309 /* SingIn.swift */,
-				EC0B1FB52AD6C4D600814309 /* Feed.swift */,
-				EC0B1FB72AD6C50600814309 /* Upload.swift */,
+				EC43C09B2AD81866008E8A1A /* ViewModel */,
+				EC43C0982AD817D1008E8A1A /* Model */,
+				EC43C0932AD81742008E8A1A /* Service */,
+				ECC8A7B62AD6D10A001C04D5 /* View */,
+				ECC8A7B52AD6D0EA001C04D5 /* Delegates */,
 				EC0B1F8E2AD6C42500814309 /* Assets.xcassets */,
 				EC0B1F902AD6C42500814309 /* LaunchScreen.storyboard */,
 				EC0B1F932AD6C42500814309 /* Info.plist */,
@@ -147,6 +157,51 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EC43C0932AD81742008E8A1A /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				EC43C0942AD81771008E8A1A /* ApiManager.swift */,
+				EC43C0962AD817A3008E8A1A /* UserService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		EC43C0982AD817D1008E8A1A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EC43C0992AD817E5008E8A1A /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EC43C09B2AD81866008E8A1A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				EC43C09C2AD81890008E8A1A /* UploadViewModel.swift */,
+				EC43C0A02AD819D0008E8A1A /* UploadViewModelOutput.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		ECC8A7B52AD6D0EA001C04D5 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				EC0B1F852AD6C42200814309 /* AppDelegate.swift */,
+				EC0B1F872AD6C42200814309 /* SceneDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		ECC8A7B62AD6D10A001C04D5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EC0B1F892AD6C42200814309 /* SingIn.swift */,
+				EC0B1FB52AD6C4D600814309 /* Feed.swift */,
+				EC0B1FB72AD6C50600814309 /* Upload.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,11 +344,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC43C0A12AD819D0008E8A1A /* UploadViewModelOutput.swift in Sources */,
+				EC43C0972AD817A3008E8A1A /* UserService.swift in Sources */,
 				EC0B1F8A2AD6C42200814309 /* SingIn.swift in Sources */,
 				EC0B1FB82AD6C50600814309 /* Upload.swift in Sources */,
 				EC0B1FB62AD6C4D600814309 /* Feed.swift in Sources */,
+				EC43C09A2AD817E5008E8A1A /* User.swift in Sources */,
 				EC0B1F862AD6C42200814309 /* AppDelegate.swift in Sources */,
+				EC43C0952AD81771008E8A1A /* ApiManager.swift in Sources */,
 				EC0B1F882AD6C42200814309 /* SceneDelegate.swift in Sources */,
+				EC43C09D2AD81890008E8A1A /* UploadViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +534,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -501,6 +562,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
