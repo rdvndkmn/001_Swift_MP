@@ -6,6 +6,6 @@
 //
 
 import Foundation
-protocol UploadViewModelOutput : AnyObject{
+protocol UploadViewModelOutput : AnyObject{//weak var olarak tanımlamak için any
     func updateView(name : String, username : String, email : String)
 }

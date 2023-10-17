@@ -6,7 +6,8 @@
 //
 
 import Foundation
-class APIManager : userService{
+class APIManager : userService{ //protocol conform edildi ve func içinde yapılacak işlemler yazıldı
+    
     
     func fetchUser(completion : @escaping (Result<User,Error>) -> Void){
         
@@ -18,7 +19,7 @@ class APIManager : userService{
                 
                 
                 do {
-                    if let user = try? JSONDecoder().decode(User.self, from: data) {
+                    if let user = try? JSONDecoder().decode([User].self, from: data).first {
                         completion(.success(user))
                     }
                 }

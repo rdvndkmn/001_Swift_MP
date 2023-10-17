@@ -8,7 +8,22 @@
 import Foundation
 import UIKit
 
-class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate{
+class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate,UploadViewModelOutput{
+
+    var users : [User] = []
+    
+    func updateView(name: String, username: String, email: String) {
+        
+        let test = User(id : 0,name : name ,username:username,email:email)
+        users.append(test)
+        
+        DataTableView.reloadData()
+        
+    }
+    
+    
+    private let viewmodel : UploadViewModel
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,19 +35,31 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         let navbar = UINavigationBar(frame: CGRect(x:0 , y: 50, width: view.bounds.width, height: 40))
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
-
+        
         let navItem = UINavigationItem()
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButton))
-
+        
         navbar.items = [navItem]
-
+        
         view.addSubview(navbar)
         
         DataTableView.delegate = self
         DataTableView.dataSource = self
-        
+        viewmodel.fetchUsers()
         setupView()
-     
+                
+    }
+         
+
+    
+    init(viewmodel: UploadViewModel) {
+        self.viewmodel = viewmodel
+        super.init(nibName: nil, bundle: nil)
+        self.viewmodel.output = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     @objc func backButton(){
@@ -65,7 +92,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     }()
     
     private let saveButton : UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.setTitle("Save", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         button.layer.cornerRadius = 25
@@ -76,7 +103,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     }()
     
     private let UsernameLabel : UILabel = {
-
+        
         let label = UILabel()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +114,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     }()
     
     private let DocumentNameLabel : UILabel = {
-
+        
         let label = UILabel()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +127,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     
     
     private let DocumentCommentLabel : UILabel = {
-
+        
         let label = UILabel()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -111,7 +138,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     }()
     
     private let DataNameLabel : UILabel = {
-
+        
         let label = UILabel()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +149,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     }()
     
     private let DataCommentLabel : UILabel = {
-
+        
         let label = UILabel()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -131,20 +158,32 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         return label
         
     }()
+  
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return users.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = "deneme"
+        /*let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)//hücreyi oluşturduk
+        var content = cell.defaultContentConfiguration()//content(içerik) oluşturduk
+        content.text = users[indexPath.row].name
+        //content.text = "rıdvan"
+        cell.contentConfiguration = content//cellin content ayarını contente eşledik
         return cell
-        
+        */
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+         let userData = users[indexPath.row]
+
+         cell.textLabel?.text = userData.name
+         cell.detailTextLabel?.text = userData.username
+
+         return cell
     }
     
-    @objc func SaveButtonClicked(sender: UIButton!){
     
+    @objc func SaveButtonClicked(sender: UIButton!){
+        
         print("Save success")
         
         
@@ -168,7 +207,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         let height = view.bounds.height
         
         NSLayoutConstraint.activate([
-        
+            
             UsernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),//x ekseninde ortaya koy
             UsernameLabel.heightAnchor.constraint(equalToConstant: 60),// yüksekliği belirledik
             UsernameLabel.widthAnchor.constraint(equalToConstant: 200),// genişliği belirledik
@@ -198,7 +237,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
             DocumentNameText.heightAnchor.constraint(equalToConstant: 60),
             DocumentNameText.widthAnchor.constraint(equalToConstant: 200),
             DocumentNameText.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-        
+            
             DocumentCommentText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             DocumentCommentText.heightAnchor.constraint(equalToConstant: 60),
             DocumentCommentText.widthAnchor.constraint(equalToConstant: 200),
@@ -208,9 +247,9 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
             DataTableView.heightAnchor.constraint(equalToConstant: height),
             DataTableView.widthAnchor.constraint(equalToConstant: width),
             DataTableView.topAnchor.constraint(equalTo: DocumentCommentText.topAnchor, constant: 100)
-        
-        
-        
+            
+            
+            
         ])
         
     }
