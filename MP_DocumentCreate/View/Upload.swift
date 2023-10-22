@@ -10,28 +10,8 @@ import UIKit
 
 class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate{
 
-
-   /*
-    func updateView(name: String, username: String, email: String) {
-        
-       
-        
-        
-        
-        DataTableView.reloadData()
-    }
-    */
     var users: [User] = []
-    
-
-
-    
-    
-    
-    
-   // private let viewmodel : UploadViewModel
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,7 +20,6 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
                    switch result {
                    case .success(let fetchedUsers):
                        self.users = fetchedUsers
-                       // TableView'ı güncelle
                        DispatchQueue.main.async {
                            self.DataTableView.reloadData()
                        }
@@ -51,39 +30,14 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
         view.backgroundColor = .white
         
-        self.navigationController?.pushViewController(FeedVC(), animated:true)
-        
-        let navbar = UINavigationBar(frame: CGRect(x:0 , y: 50, width: view.bounds.width, height: 40))
-        navbar.backgroundColor = UIColor.white
-        navbar.delegate = self
-        
-        let navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButton))
-        
-        navbar.items = [navItem]
-        
-        view.addSubview(navbar)
-        
         DataTableView.delegate = self
         DataTableView.dataSource = self
-       // viewmodel.fetchUsers()
+        
+        navBar()
         setupView()
         
-                
     }
-         
-/*
-    
-    init(viewmodel: UploadViewModel) {
-        self.viewmodel = viewmodel
-        super.init(nibName: nil, bundle: nil)
-        self.viewmodel.output = self
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    */
+
     @objc func backButton(){
         let feedvc = FeedVC()
         feedvc.modalPresentationStyle = .fullScreen
@@ -182,6 +136,21 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
     }()
     
+    func navBar(){
+        self.navigationController?.pushViewController(FeedVC(), animated:true)
+        
+        let navbar = UINavigationBar(frame: CGRect(x:0 , y: 50, width: view.bounds.width, height: 40))
+        navbar.backgroundColor = UIColor.white
+        navbar.delegate = self
+        
+        let navItem = UINavigationItem()
+        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButton))
+        
+        navbar.items = [navItem]
+        
+        view.addSubview(navbar)
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
@@ -196,14 +165,12 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
     }
     
-    
     @objc func SaveButtonClicked(sender: UIButton!){
         
         print("Save success")
         
         
     }
-    
     
     private func setupView(){
         
@@ -220,6 +187,8 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
         let width = view.bounds.width
         let height = view.bounds.height
+        
+      
         
         NSLayoutConstraint.activate([
             
