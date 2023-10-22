@@ -49,9 +49,9 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource, UINav
     }
     
     @objc func addClicked(){
-        let service = APIManager()
-        let viewmodel = UploadViewModel(userservice: service)
-        let upload = UploadVC(viewmodel: viewmodel)
+       // let service = APIManager()
+        //let viewmodel = UploadViewModel(userservice: service)
+        let upload = UploadVC()
         upload.modalPresentationStyle = .fullScreen
         present(upload, animated: true, completion: nil)
     }

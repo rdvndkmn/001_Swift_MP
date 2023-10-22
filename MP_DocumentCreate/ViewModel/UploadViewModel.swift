@@ -4,7 +4,7 @@
 //
 //  Created by Rıdvan Dikmen on 12.10.2023.
 //
-
+/*
 import Foundation
 
 class UploadViewModel{
@@ -34,3 +34,4 @@ class UploadViewModel{
     }
     
 }
+*/

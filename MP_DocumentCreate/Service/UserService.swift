@@ -8,5 +8,5 @@
 import Foundation
 
 protocol userService{ //userservice protocol olduğu için viewmodelda kullanılabilir 
-    func fetchUser(completion : @escaping (Result<User,Error>) -> Void)
+    func fetchUser(completion : @escaping (Result<[User],Error>) -> Void)
 }

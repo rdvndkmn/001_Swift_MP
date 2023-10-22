@@ -8,25 +8,46 @@
 import Foundation
 import UIKit
 
-class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate,UploadViewModelOutput{
+class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate{
 
-    var users : [User] = []
-    
+
+   /*
     func updateView(name: String, username: String, email: String) {
         
-        let test = User(id : 0,name : name ,username:username,email:email)
-        users.append(test)
+       
+        
+        
         
         DataTableView.reloadData()
-        
     }
+    */
+    var users: [User] = []
+    
+
+
     
     
-    private let viewmodel : UploadViewModel
+    
+    
+   // private let viewmodel : UploadViewModel
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let apiManager = APIManager()
+               apiManager.fetchUser { result in
+                   switch result {
+                   case .success(let fetchedUsers):
+                       self.users = fetchedUsers
+                       // TableView'ı güncelle
+                       DispatchQueue.main.async {
+                           self.DataTableView.reloadData()
+                       }
+                   case .failure(let error):
+                       print("Hata: \(error)")
+                   }
+               }
         
         view.backgroundColor = .white
         
@@ -45,12 +66,13 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
         DataTableView.delegate = self
         DataTableView.dataSource = self
-        viewmodel.fetchUsers()
+       // viewmodel.fetchUsers()
         setupView()
+        
                 
     }
          
-
+/*
     
     init(viewmodel: UploadViewModel) {
         self.viewmodel = viewmodel
@@ -61,7 +83,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    */
     @objc func backButton(){
         let feedvc = FeedVC()
         feedvc.modalPresentationStyle = .fullScreen
@@ -88,6 +110,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         let tableview = UITableView()
         tableview.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableview.translatesAutoresizingMaskIntoConstraints = false
+      
         return tableview
     }()
     
@@ -158,27 +181,19 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         return label
         
     }()
-  
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        /*let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)//hücreyi oluşturduk
+        let cell = UITableViewCell()//hücreyi oluşturduk
         var content = cell.defaultContentConfiguration()//content(içerik) oluşturduk
-        content.text = users[indexPath.row].name
-        //content.text = "rıdvan"
+        let user = users[indexPath.row]
+        content.text = user.name
         cell.contentConfiguration = content//cellin content ayarını contente eşledik
         return cell
-        */
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-         let userData = users[indexPath.row]
-
-         cell.textLabel?.text = userData.name
-         cell.detailTextLabel?.text = userData.username
-
-         return cell
+        
     }
     
     

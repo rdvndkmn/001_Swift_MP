@@ -8,8 +8,7 @@
 import Foundation
 class APIManager : userService{ //protocol conform edildi ve func içinde yapılacak işlemler yazıldı
     
-    
-    func fetchUser(completion : @escaping (Result<User,Error>) -> Void){
+    func fetchUser(completion : @escaping (Result<[User],Error>) -> Void){
         
         let url = URL(string: "https://jsonplaceholder.typicode.com/users")!
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -19,9 +18,9 @@ class APIManager : userService{ //protocol conform edildi ve func içinde yapıl
                 
                 
                 do {
-                    if let user = try? JSONDecoder().decode([User].self, from: data).first {
-                        completion(.success(user))
-                    }
+                    let users = try? JSONDecoder().decode([User].self, from: data)
+                    completion(.success(users!))
+                    
                 }
                 catch{
                     completion(.failure(NSError()))
