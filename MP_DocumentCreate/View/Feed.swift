@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource, UINavigationBarDelegate {
    
@@ -41,13 +42,19 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource, UINav
     }
 
     @objc func LogOutnClicked(sender: UIButton!){
-    
-        let singin = SingIn()
-        singin.modalPresentationStyle = .fullScreen
-        present(singin, animated: true, completion: nil)
         
+        do{
+            try Auth.auth().signOut()//hata fırlattığı için do try catch de yapılıyor
+            let singin = SingIn()
+            singin.modalPresentationStyle = .fullScreen
+            present(singin, animated: true, completion: nil)
+        }
+        catch{
+            print("error")
+        }
+
     }
-    
+ 
     @objc func addClicked(){
        // let service = APIManager()
         //let viewmodel = UploadViewModel(userservice: service)

@@ -27,6 +27,7 @@
 		EC43C09A2AD817E5008E8A1A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C0992AD817E5008E8A1A /* User.swift */; };
 		EC43C09D2AD81890008E8A1A /* UploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C09C2AD81890008E8A1A /* UploadViewModel.swift */; };
 		EC43C0A12AD819D0008E8A1A /* UploadViewModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC43C0A02AD819D0008E8A1A /* UploadViewModelOutput.swift */; };
+		EC7B09732AE571CF007FFA35 /* UserSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7B09722AE571CF007FFA35 /* UserSingleton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		EC43C0992AD817E5008E8A1A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		EC43C09C2AD81890008E8A1A /* UploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewModel.swift; sourceTree = "<group>"; };
 		EC43C0A02AD819D0008E8A1A /* UploadViewModelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewModelOutput.swift; sourceTree = "<group>"; };
+		EC7B09722AE571CF007FFA35 /* UserSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSingleton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				EC43C0992AD817E5008E8A1A /* User.swift */,
+				EC7B09722AE571CF007FFA35 /* UserSingleton.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC7B09732AE571CF007FFA35 /* UserSingleton.swift in Sources */,
 				EC43C0A12AD819D0008E8A1A /* UploadViewModelOutput.swift in Sources */,
 				EC43C0972AD817A3008E8A1A /* UserService.swift in Sources */,
 				EC0B1F8A2AD6C42200814309 /* SingIn.swift in Sources */,

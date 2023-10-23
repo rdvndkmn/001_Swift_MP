@@ -7,13 +7,16 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate{
 
+    var choseName = ""
+    
     var users: [User] = []
-        
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         let apiManager = APIManager()
                apiManager.fetchUser { result in
@@ -68,6 +71,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         return tableview
     }()
     
+    /*
     private let saveButton : UIButton = {
         let button = UIButton()
         button.setTitle("Save", for: .normal)
@@ -78,7 +82,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+    */
     private let UsernameLabel : UILabel = {
         
         let label = UILabel()
@@ -143,10 +147,12 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
         
-        let navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButton))
+        let navBack = UINavigationItem()
+        navBack.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButton))
+        let navSave = UINavigationItem()
+        navSave.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(SaveButtonClicked))
         
-        navbar.items = [navItem]
+        navbar.items = [navBack, navSave]
         
         view.addSubview(navbar)
     }
@@ -164,12 +170,30 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         return cell
         
     }
-    
+    /*
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {//tableviewde cell seçildiğinde napılacağını yazarız
+        let user = users[indexPath.row]
+        choseName = user as! String
+        
+       }
+    */
     @objc func SaveButtonClicked(sender: UIButton!){
+
+        let fireStore = Firestore.firestore()//database oluşturduk
         
-        print("Save success")
+        var fireStorePost = ["email": Auth.auth().currentUser?.email!,"Username" : UserSingleton.sharedUserInfo.username, "DocumentName": self.DocumentNameText.text,"DocumentComment": self.DocumentCommentText.text!,"date":FieldValue.serverTimestamp()] as [String : Any]//kaydedilecek postda vtde hangi bilgiler tutulucak kaydettik
         
-        
+        fireStore.collection("Document").addDocument(data: fireStorePost,completion: { (error) in
+            if error != nil{
+                self.makeAlert(title: "Error", message: error!.localizedDescription ?? "error")
+            }
+            else{
+                let feed = FeedVC()
+                feed.modalPresentationStyle = .fullScreen
+                self.present(feed, animated: true, completion: nil)
+            }
+        })
+      
     }
     
     private func setupView(){
@@ -237,5 +261,12 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         ])
         
     }
+    @objc func makeAlert(title: String,message:String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(okButton)
+        self.present(alert, animated: true,completion: nil)
+    }
+
     
 }

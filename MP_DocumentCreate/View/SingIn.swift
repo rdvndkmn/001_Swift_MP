@@ -14,9 +14,9 @@ class SingIn: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         setupView()
     }
+    
     private let UserNametext : UITextField = {
          let username = UITextField()
          username.placeholder = "UserName"
@@ -111,21 +111,19 @@ class SingIn: UIViewController {
                      self.makeAlert(title: "Error", message: error?.localizedDescription ?? "ERROR")
                  }
                  else{
-                         let feed = FeedVC()
-                         feed.modalPresentationStyle = .fullScreen
-                         self.present(feed, animated: true, completion: nil)
+                     
+                     let feed = FeedVC()
+                     feed.modalPresentationStyle = .fullScreen
+                     self.present(feed, animated: true, completion: nil)
                  }
              }
+             
              
          }
          else{
              makeAlert(title: "error", message: "email/password is null")
          }
-         /*
-         let feed = FeedVC()
-         feed.modalPresentationStyle = .fullScreen
-         self.present(feed, animated: true, completion: nil)
-          */
+       
      }
      
      
@@ -139,6 +137,15 @@ class SingIn: UIViewController {
                  }
                  else{
                      
+                     let fireStore = Firestore.firestore()//firesotore değişkeni oluşturduk
+                                         
+                     let userDictionary = ["email" : self.EmailText.text!,"username": self.UserNametext.text!] as [String : Any]//aldığımız verileri keylerle oluşturduk
+                                         
+                     fireStore.collection("UserInfo").addDocument(data: userDictionary) { (error) in//database collection oluşturduk ve içine aldığımız verileri koyduk
+                         if error != nil {
+                             self.makeAlert(title: "error", message: "Networkerror")
+                         }
+                     }
                          let feed = FeedVC()
                          feed.modalPresentationStyle = .fullScreen
                          self.present(feed, animated: true, completion: nil)
@@ -159,4 +166,7 @@ class SingIn: UIViewController {
      }
 
 }
+
+    
+    
 
