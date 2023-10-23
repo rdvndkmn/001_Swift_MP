@@ -12,6 +12,8 @@ import Firebase
 class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate{
 
     var choseName = ""
+    var selectedName : String = ""
+    var selectedUsername : String = ""
     
     var users: [User] = []
     override func viewDidLoad() {
@@ -166,22 +168,22 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         var content = cell.defaultContentConfiguration()//content(içerik) oluşturduk
         let user = users[indexPath.row]
         content.text = user.name
+        content.secondaryText = user.username
         cell.contentConfiguration = content//cellin content ayarını contente eşledik
         return cell
         
     }
-    /*
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {//tableviewde cell seçildiğinde napılacağını yazarız
-        let user = users[indexPath.row]
-        choseName = user as! String
-        
+        self.selectedName = users[indexPath.row].name
+        self.selectedUsername = users[indexPath.row].username
        }
-    */
+    
     @objc func SaveButtonClicked(sender: UIButton!){
 
         let fireStore = Firestore.firestore()//database oluşturduk
         
-        var fireStorePost = ["email": Auth.auth().currentUser?.email!,"Username" : UserSingleton.sharedUserInfo.username, "DocumentName": self.DocumentNameText.text,"DocumentComment": self.DocumentCommentText.text!,"date":FieldValue.serverTimestamp()] as [String : Any]//kaydedilecek postda vtde hangi bilgiler tutulucak kaydettik
+        var fireStorePost = ["email": Auth.auth().currentUser?.email!,"Username" : UserSingleton.sharedUserInfo.username, "DocumentName": self.DocumentNameText.text,"DocumentComment": self.DocumentCommentText.text!,"Apiname" : selectedName,"Apiusername" : selectedUsername,"date":FieldValue.serverTimestamp()] as [String : Any]//kaydedilecek postda vtde hangi bilgiler tutulucak kaydettik
         
         fireStore.collection("Document").addDocument(data: fireStorePost,completion: { (error) in
             if error != nil{

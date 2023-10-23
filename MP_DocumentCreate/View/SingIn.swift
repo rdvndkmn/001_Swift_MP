@@ -10,11 +10,12 @@ import Firebase
 
 class SingIn: UIViewController {
     
-    
+    let fireStoreDatabase = Firestore.firestore()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        
     }
     
     private let UserNametext : UITextField = {
@@ -46,7 +47,7 @@ class SingIn: UIViewController {
          button.setTitle("SingIn", for: .normal)
          button.setTitleColor(.blue, for: .normal)
          button.layer.cornerRadius = 25
-         button.backgroundColor = .red
+         button.backgroundColor = .green
          button.addTarget(self, action: #selector(SingInButtonClicked), for: .touchUpInside)
          button.translatesAutoresizingMaskIntoConstraints = false
          return button
@@ -57,7 +58,7 @@ class SingIn: UIViewController {
          button.setTitle("SingUp", for: .normal)
          button.setTitleColor(.blue, for: .normal)
          button.layer.cornerRadius = 25
-         button.backgroundColor = .red
+         button.backgroundColor = .green
          button.addTarget(self, action: #selector(SingUpButtonClicked), for: .touchUpInside)
          button.translatesAutoresizingMaskIntoConstraints = false
          return button
@@ -112,12 +113,33 @@ class SingIn: UIViewController {
                  }
                  else{
                      
+                     ///
+                         
+                         self.fireStoreDatabase.collection("UserInfo").whereField("email", isEqualTo: Auth.auth().currentUser!.email!).getDocuments { (snapshot, error) in//wherefield eşit olanı getir demek için //veriyi çekiyoruz
+                             if error != nil {
+                                 self.makeAlert(title: "Error", message: error?.localizedDescription ?? "Error")
+                             } else {
+                                 if snapshot?.isEmpty == false && snapshot != nil {
+                                     for document in snapshot!.documents {
+                                         if let username = document.get("username") as? String {
+                                             UserSingleton.sharedUserInfo.username = username
+                                         }
+                                     }
+                                 }
+                             }
+                         }
+                     
+                     
+                     ///
+                     
+                
                      let feed = FeedVC()
                      feed.modalPresentationStyle = .fullScreen
                      self.present(feed, animated: true, completion: nil)
+                 
                  }
              }
-             
+
              
          }
          else{
@@ -164,7 +186,7 @@ class SingIn: UIViewController {
          alert.addAction(okButton)
          self.present(alert, animated: true,completion: nil)
      }
-
+    
 }
 
     
