@@ -24,6 +24,10 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
+        trigger()
+
+        
         setupNavigationBar()
 
         let apiManager = APIManager()
@@ -49,7 +53,6 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
         setupView()
         currentname()
-        trigger()
         
     }
 
@@ -290,7 +293,8 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
     }
     
     func trigger(){
-        if DocumentSingleton.sharedDocument.trigger == 1{
+        let name = DocumentSingleton.sharedDocument.ApiName
+        if name != ""{
             self.DocumentNameText.isHidden = true
             self.DocumentCommentText.isHidden = true
             self.DataTableView.isHidden = true
@@ -305,6 +309,16 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
             self.DocumentCommentLabel.text = DocumentSingleton.sharedDocument.DocumentComment
             self.DataNameLabel.text = DocumentSingleton.sharedDocument.ApiName
             self.DataCommentLabel.text = DocumentSingleton.sharedDocument.ApiUsername
+        }
+        else {
+            self.DocumentNameText.isHidden = false
+            self.DocumentCommentText.isHidden = false
+            self.DataTableView.isHidden = false
+            self.DocumentNameLabel.isHidden = true
+            self.DocumentCommentLabel.isHidden = true
+            self.DataNameLabel.isHidden = true
+            self.DataCommentLabel.isHidden = true
+            self.UsernameLabel.isHidden = true
         }
         
     }

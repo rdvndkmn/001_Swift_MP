@@ -14,7 +14,6 @@ class DocumentSingleton {//singleton bir sınıf var bu sınıftan bir obje olu�
     var ApiUsername = ""
     var DocumentName = ""
     var DocumentComment = ""
-    var trigger = 1
     private init() {
         
     }

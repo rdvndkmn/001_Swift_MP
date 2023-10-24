@@ -116,11 +116,15 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource, UINav
     }
  
     @objc func addClicked(){
-       // let service = APIManager()
-        //let viewmodel = UploadViewModel(userservice: service)
+        
+        DocumentSingleton.sharedDocument.ApiName = ""
+        DocumentSingleton.sharedDocument.ApiUsername = ""
+        DocumentSingleton.sharedDocument.DocumentName = ""
+        DocumentSingleton.sharedDocument.DocumentComment = ""
         let upload = UploadVC()
         upload.modalPresentationStyle = .fullScreen
         present(upload, animated: true, completion: nil)
+        
     }
     
     override func viewDidLayoutSubviews() {//oluşturulan objeler size ve kordinat belirlemek için
@@ -166,8 +170,6 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource, UINav
         DocumentSingleton.sharedDocument.ApiUsername = chosenDocument?.ApiUsername ?? ""
         DocumentSingleton.sharedDocument.DocumentName = chosenDocument?.DocumentName ?? ""
         DocumentSingleton.sharedDocument.DocumentComment = chosenDocument?.DocumentComment ?? ""
-        DocumentSingleton.sharedDocument.trigger = 1
-
         let upload = UploadVC()
         upload.modalPresentationStyle = .fullScreen
         present(upload, animated: true, completion: nil)
