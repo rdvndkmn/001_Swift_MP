@@ -10,7 +10,7 @@ import Firebase
 
 class SingIn: UIViewController {
     
-    let fireStoreDatabase = Firestore.firestore()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,24 +113,7 @@ class SingIn: UIViewController {
                  }
                  else{
                      
-                     ///
-                         
-                         self.fireStoreDatabase.collection("UserInfo").whereField("email", isEqualTo: Auth.auth().currentUser!.email!).getDocuments { (snapshot, error) in//wherefield eşit olanı getir demek için //veriyi çekiyoruz
-                             if error != nil {
-                                 self.makeAlert(title: "Error", message: error?.localizedDescription ?? "Error")
-                             } else {
-                                 if snapshot?.isEmpty == false && snapshot != nil {
-                                     for document in snapshot!.documents {
-                                         if let username = document.get("username") as? String {
-                                             UserSingleton.sharedUserInfo.username = username
-                                         }
-                                     }
-                                 }
-                             }
-                         }
-                     
-                     
-                     ///
+                 
                      
                 
                      let feed = FeedVC()

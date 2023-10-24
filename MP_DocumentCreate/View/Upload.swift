@@ -10,16 +10,22 @@ import UIKit
 import Firebase
 
 class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINavigationBarDelegate{
+    
+    var selectedDocument : DocumentGet?
+
 
     var choseName = ""
     var selectedName : String = ""
     var selectedUsername : String = ""
-    
+    ///
+    let fireStoreDatabase = Firestore.firestore()
+    ///
     var users: [User] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        setupNavigationBar()
+
         let apiManager = APIManager()
                apiManager.fetchUser { result in
                    switch result {
@@ -35,13 +41,52 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
         view.backgroundColor = .white
         
+        self.navigationController?.pushViewController(FeedVC(), animated:true)
+
+        
         DataTableView.delegate = self
         DataTableView.dataSource = self
         
-        navBar()
         setupView()
+        currentname()
+        trigger()
         
     }
+
+    func setupNavigationBar() {
+        let navbar = UINavigationBar(frame: CGRect(x: 0, y: 50, width: view.bounds.width, height: 40))
+        navbar.backgroundColor = UIColor.red
+        navbar.delegate = self
+        
+        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButton))
+        let saveButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(SaveButtonClicked))
+        
+        let navItem = UINavigationItem()
+        navItem.leftBarButtonItem = backButton
+        navItem.rightBarButtonItem = saveButton
+        
+        navbar.items = [navItem]
+        
+        view.addSubview(navbar)
+    }
+    
+    ///
+    func currentname(){
+        self.fireStoreDatabase.collection("UserInfo").whereField("email", isEqualTo: Auth.auth().currentUser!.email!).getDocuments { (snapshot, error) in//wherefield eşit olanı getir demek için //veriyi çekiyoruz
+            if error != nil {
+                self.makeAlert(title: "Error", message: error?.localizedDescription ?? "Error")
+            } else {
+                if snapshot?.isEmpty == false && snapshot != nil {
+                    for document in snapshot!.documents {
+                        if let username = document.get("username") as? String {
+                            UserSingleton.sharedUserInfo.username = username
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ///
 
     @objc func backButton(){
         let feedvc = FeedVC()
@@ -72,19 +117,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
       
         return tableview
     }()
-    
-    /*
-    private let saveButton : UIButton = {
-        let button = UIButton()
-        button.setTitle("Save", for: .normal)
-        button.setTitleColor(.blue, for: .normal)
-        button.layer.cornerRadius = 25
-        button.backgroundColor = .red
-        button.addTarget(self, action: #selector(SaveButtonClicked), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    */
+
     private let UsernameLabel : UILabel = {
         
         let label = UILabel()
@@ -142,22 +175,7 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         
     }()
     
-    func navBar(){
-        self.navigationController?.pushViewController(FeedVC(), animated:true)
-        
-        let navbar = UINavigationBar(frame: CGRect(x:0 , y: 50, width: view.bounds.width, height: 40))
-        navbar.backgroundColor = UIColor.white
-        navbar.delegate = self
-        
-        let navBack = UINavigationItem()
-        navBack.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButton))
-        let navSave = UINavigationItem()
-        navSave.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(SaveButtonClicked))
-        
-        navbar.items = [navBack, navSave]
-        
-        view.addSubview(navbar)
-    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
@@ -183,11 +201,11 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
 
         let fireStore = Firestore.firestore()//database oluşturduk
         
-        var fireStorePost = ["email": Auth.auth().currentUser?.email!,"Username" : UserSingleton.sharedUserInfo.username, "DocumentName": self.DocumentNameText.text,"DocumentComment": self.DocumentCommentText.text!,"Apiname" : selectedName,"Apiusername" : selectedUsername,"date":FieldValue.serverTimestamp()] as [String : Any]//kaydedilecek postda vtde hangi bilgiler tutulucak kaydettik
+        var fireStorePost = ["email": Auth.auth().currentUser?.email! ?? "", "DocumentName": self.DocumentNameText.text ?? "","DocumentComment": self.DocumentCommentText.text!,"Apiname" : selectedName,"Apiusername" : selectedUsername,"date":FieldValue.serverTimestamp()] as [String : Any]//kaydedilecek postda vtde hangi bilgiler tutulucak kaydettik
         
         fireStore.collection("Document").addDocument(data: fireStorePost,completion: { (error) in
             if error != nil{
-                self.makeAlert(title: "Error", message: error!.localizedDescription ?? "error")
+                self.makeAlert(title: "Error", message: error!.localizedDescription )
             }
             else{
                 let feed = FeedVC()
@@ -263,12 +281,35 @@ class UploadVC : UIViewController,UITableViewDataSource,UITableViewDelegate,UINa
         ])
         
     }
+    
     @objc func makeAlert(title: String,message:String){
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
         alert.addAction(okButton)
         self.present(alert, animated: true,completion: nil)
     }
+    
+    func trigger(){
+        if DocumentSingleton.sharedDocument.trigger == 1{
+            self.DocumentNameText.isHidden = true
+            self.DocumentCommentText.isHidden = true
+            self.DataTableView.isHidden = true
+            self.DocumentNameLabel.isHidden = false
+            self.DocumentCommentLabel.isHidden = false
+            self.DataNameLabel.isHidden = false
+            self.DataCommentLabel.isHidden = false
+            self.UsernameLabel.isHidden = false
+            
+            self.UsernameLabel.text = UserSingleton.sharedUserInfo.username
+            self.DocumentNameLabel.text = DocumentSingleton.sharedDocument.DocumentName
+            self.DocumentCommentLabel.text = DocumentSingleton.sharedDocument.DocumentComment
+            self.DataNameLabel.text = DocumentSingleton.sharedDocument.ApiName
+            self.DataCommentLabel.text = DocumentSingleton.sharedDocument.ApiUsername
+        }
+        
+    }
 
     
 }
+
+
