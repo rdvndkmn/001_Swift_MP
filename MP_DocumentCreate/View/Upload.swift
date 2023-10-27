@@ -3,19 +3,14 @@
 //  MP_DocumentCreate
 //
 //  Created by Rıdvan Dikmen on 11.10.2023.
-//
-//
-//  UploadVC.swift
-//  MP_DocumentCreate
-//
-//  Created by Rıdvan Dikmen on 11.10.2023.
-//
 
 import Foundation
 import UIKit
 import Firebase
 
 class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UINavigationBarDelegate, AlertProtocol {
+
+    
     let fireStoreDatabase = Firestore.firestore()
     var selectedDocument: DocumentGet?
     var chosenName = ""

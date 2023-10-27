@@ -130,5 +130,32 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
         upload.modalPresentationStyle = .fullScreen
         present(upload, animated: true, completion: nil)
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {//tableviewde cell silme için
+        if editingStyle == .delete{//eğer editingstyle delete ise silicek
+            let itemToRemove = self.documentArray.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)//tableviewi tableview.reloaddata() demek tüm verileri çeker bu sebepten sadece silinen cell kaldırıldı
+            // Firebase'den de ilgili öğeyi silin
+            let fireStore = Firestore.firestore()
+            fireStore.collection("Document").whereField("DocumentName", isEqualTo: itemToRemove.DocumentName).getDocuments { (snapshot, error) in
+                if let error = error {
+                    print("Error fetching document to delete: \(error)")
+                } else {
+                    // Eğer belirli bir belge bulunursa, onu silin
+                    if let document = snapshot?.documents.first {
+                        document.reference.delete() { error in
+                            if let error = error {
+                                print("Error deleting document: \(error)")
+                            } else {
+                                print("Document successfully deleted!")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+   
 }
+
 
