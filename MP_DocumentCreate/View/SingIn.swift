@@ -8,15 +8,7 @@ import UIKit
 import Firebase
 
 class SingIn: UIViewController, AlertProtocol {
-/*
-    private let userNametext: UITextField = {
-        let username = UITextField()
-        username.placeholder = "UserName"
-        username.textAlignment = .center
-        username.translatesAutoresizingMaskIntoConstraints = false
-        return username
-    }()
-*/
+
     private let emailText: UITextField = {
         let email = UITextField()
         email.placeholder = "Email"
@@ -69,12 +61,7 @@ class SingIn: UIViewController, AlertProtocol {
         view.addSubview(singUpButton)
 
         NSLayoutConstraint.activate([
-            /*
-            userNametext.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            userNametext.heightAnchor.constraint(equalToConstant: 60),
-            userNametext.widthAnchor.constraint(equalToConstant: 200),
-            userNametext.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-*/
+
             emailText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emailText.heightAnchor.constraint(equalToConstant: 60),
             emailText.widthAnchor.constraint(equalToConstant: 200),
