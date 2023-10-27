@@ -69,7 +69,7 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
 
     @objc func saveButton() {
         let fireStore = Firestore.firestore()
-        var fireStorePost = ["email": Auth.auth().currentUser?.email! ?? "", "DocumentName": self.DocumentNameText.text ?? "",
+        let fireStorePost = ["email": Auth.auth().currentUser?.email! ?? "", "DocumentName": self.DocumentNameText.text ?? "",
                              "DocumentComment": self.DocumentCommentText.text!,"Apiname": selectedName,
                              "Apiusername": selectedUsername, "date":FieldValue.serverTimestamp()] as [String : Any]
 

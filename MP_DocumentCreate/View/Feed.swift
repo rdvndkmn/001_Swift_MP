@@ -13,7 +13,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
     let fireStoreDatabase = Firestore.firestore()
     var documentArray = [DocumentGet]()
     var chosenDocument: DocumentGet?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -24,7 +24,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
         getDocumentFromFirebase()
         view.addSubview(FeedTableView)
     }
-
+    
     func setupNavigationBar() {
         let navbar = UINavigationBar(frame: CGRect(x: 0, y: 50, width: view.bounds.width, height: 40))
         navbar.backgroundColor = UIColor.white
@@ -35,7 +35,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
         navbar.items = [navItem]
         view.addSubview(navbar)
     }
-
+    
     @objc func logOutButtonClicked() {
         do {
             try Auth.auth().signOut()
@@ -46,7 +46,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
             print("Error while signing out: \(error)")
         }
     }
-
+    
     @objc func addButtonClicked() {
         DocumentSingleton.sharedDocument.ApiName = ""
         DocumentSingleton.sharedDocument.ApiUsername = ""
@@ -56,48 +56,50 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
         upload.modalPresentationStyle = .fullScreen
         present(upload, animated: true, completion: nil)
     }
-
+    
     func getDocumentFromFirebase() {
         fireStoreDatabase.collection("Document").order(by: "date", descending: true).addSnapshotListener { (snapshot, error) in
-                if let error = error {
-                    self.showAlert(title: "Error", message: error.localizedDescription)
-                } else {
-                    
-                    if let documents = snapshot?.documents {
-                        self.documentArray.removeAll(keepingCapacity: false)
-                        for document in documents {
-                            if let apiname = document.get("Apiname") as? String,
-                               let apiusername = document.get("Apiusername") as? String,
-                               let documentcomment = document.get("DocumentComment") as? String,
-                               let documentname = document.get("DocumentName") as? String,
-                               let email = document.get("email") as? String,
-                               let date = document.get("date") as? Timestamp {
+            if let error = error {
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            } else {
+                
+                if let documents = snapshot?.documents {
+                    self.documentArray.removeAll(keepingCapacity: false)
+                    for document in documents {
+                        if let apiname = document.get("Apiname") as? String,
+                           let apiusername = document.get("Apiusername") as? String,
+                           let documentcomment = document.get("DocumentComment") as? String,
+                           let documentname = document.get("DocumentName") as? String,
+                           let email = document.get("email") as? String,
+                           let date = document.get("date") as? Timestamp {
+                            if Auth.auth().currentUser?.email == email{
                                 let documentGet = DocumentGet(email: email, ApiName: apiname, ApiUsername: apiusername, DocumentName: documentname, DocumentComment: documentcomment, Date: date.dateValue())
                                 self.documentArray.append(documentGet)
                             }
                         }
-                        self.FeedTableView.reloadData()
                     }
+                    self.FeedTableView.reloadData()
                 }
             }
         }
+    }
     
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         FeedTableView.frame = CGRect(x: 0, y: 100, width: view.bounds.width, height: view.bounds.height)
     }
-
+    
     private let FeedTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return documentArray.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         var content = cell.defaultContentConfiguration()
@@ -107,7 +109,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
         cell.contentConfiguration = content
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         chosenDocument = documentArray[indexPath.row]
         DocumentSingleton.sharedDocument.eMail = chosenDocument?.email ?? ""
@@ -144,7 +146,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
             }
         }
     }
-   
+    
 }
 
 

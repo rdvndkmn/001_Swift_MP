@@ -7,17 +7,12 @@
 
 import Foundation
 class DocumentSingleton {//singleton bir sınıf var bu sınıftan bir obje oluşturulabilir
-    
     static let sharedDocument = DocumentSingleton()//bu sınıftan oluşturulan tek obje
-    
     var eMail = ""
     var ApiName = ""
     var ApiUsername = ""
     var DocumentName = ""
     var DocumentComment = ""
     private init() {
-        
     }
-    
-    
 }
