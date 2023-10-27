@@ -8,7 +8,7 @@ import UIKit
 import Firebase
 
 class SingIn: UIViewController, AlertProtocol {
-
+/*
     private let userNametext: UITextField = {
         let username = UITextField()
         username.placeholder = "UserName"
@@ -16,7 +16,7 @@ class SingIn: UIViewController, AlertProtocol {
         username.translatesAutoresizingMaskIntoConstraints = false
         return username
     }()
-
+*/
     private let emailText: UITextField = {
         let email = UITextField()
         email.placeholder = "Email"
@@ -62,22 +62,23 @@ class SingIn: UIViewController, AlertProtocol {
 
     private func setupView() {
         view.backgroundColor = .white
-        view.addSubview(userNametext)
+        //view.addSubview(userNametext)
         view.addSubview(emailText)
         view.addSubview(passwordText)
         view.addSubview(singInButton)
         view.addSubview(singUpButton)
 
         NSLayoutConstraint.activate([
+            /*
             userNametext.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             userNametext.heightAnchor.constraint(equalToConstant: 60),
             userNametext.widthAnchor.constraint(equalToConstant: 200),
             userNametext.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-
+*/
             emailText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emailText.heightAnchor.constraint(equalToConstant: 60),
             emailText.widthAnchor.constraint(equalToConstant: 200),
-            emailText.topAnchor.constraint(equalTo: userNametext.topAnchor, constant: 100),
+            emailText.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
 
             passwordText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             passwordText.heightAnchor.constraint(equalToConstant: 60),
@@ -113,13 +114,13 @@ class SingIn: UIViewController, AlertProtocol {
     }
 
     @objc func singUpButtonClicked(sender: UIButton!) {
-        if emailText.text != "" && passwordText.text != "" && userNametext.text != "" {
+        if emailText.text != "" && passwordText.text != ""{
             Auth.auth().createUser(withEmail: emailText.text!, password: passwordText.text!) { authData, error in
                 if error != nil {
                     self.showAlert(title: "Error", message: error?.localizedDescription ?? "ERROR")
                 } else {
                     let firestore = Firestore.firestore()
-                    let userDictionary = ["email": self.emailText.text!, "username": self.userNametext.text!] as [String: Any]
+                    let userDictionary = ["email": self.emailText.text!] as [String: Any]
                     firestore.collection("UserInfo").addDocument(data: userDictionary) { error in
                         if error != nil {
                             self.showAlert(title: "Error", message: "Network Error")

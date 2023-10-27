@@ -8,11 +8,10 @@
 import Foundation
 
 struct DocumentGet {//veri çekmek için
+    var email : String
     var ApiName : String
     var ApiUsername : String
     var DocumentName : String
     var DocumentComment : String
     var Date : Date
-
-    
 }

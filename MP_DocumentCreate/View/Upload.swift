@@ -17,6 +17,7 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     var selectedName: String = ""
     var selectedUsername: String = ""
     var users: [User] = []
+    var number = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,6 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         DataTableView.delegate = self
         DataTableView.dataSource = self
         setupView()
-        getCurrentUsername()
     }
     func setupNavigationBar() {
         let navbar = UINavigationBar(frame: CGRect(x: 0, y: 50, width: view.bounds.width, height: 40))
@@ -45,6 +45,12 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         navbar.items = [navItem]
         
         view.addSubview(navbar)
+        if self.number == 1{
+            saveButton.isHidden = true
+        }
+        else{
+            saveButton.isHidden = false
+        }
     }
     func fetchUsers() {
         let apiManager = APIManager()
@@ -61,18 +67,6 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         }
     }
 
-    func getCurrentUsername() {
-        fireStoreDatabase.collection("UserInfo").whereField("email", isEqualTo: Auth.auth().currentUser!.email!).getDocuments { (snapshot, error) in
-            if error != nil {
-                self.showAlert(title: "Error", message: error?.localizedDescription ?? "Error")
-            } else {
-                if let document = snapshot?.documents.first,
-                   let username = document["username"] as? String {
-                    UserSingleton.sharedUserInfo.username = username
-                }
-            }
-        }
-    }
     @objc func saveButton() {
         let fireStore = Firestore.firestore()
         var fireStorePost = ["email": Auth.auth().currentUser?.email! ?? "", "DocumentName": self.DocumentNameText.text ?? "",
@@ -88,6 +82,7 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
                 self.present(feed, animated: true, completion: nil)
             }
         }
+
     }
 
     @objc func backButton() {
@@ -244,7 +239,8 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
             self.DataNameLabel.isHidden = false
             self.DataCommentLabel.isHidden = false
             self.UsernameLabel.isHidden = false
-            self.UsernameLabel.text = UserSingleton.sharedUserInfo.username
+            self.number = 1
+            self.UsernameLabel.text = DocumentSingleton.sharedDocument.eMail
             self.DocumentNameLabel.text = DocumentSingleton.sharedDocument.DocumentName
             self.DocumentCommentLabel.text = DocumentSingleton.sharedDocument.DocumentComment
             self.DataNameLabel.text = DocumentSingleton.sharedDocument.ApiName

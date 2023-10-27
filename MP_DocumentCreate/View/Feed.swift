@@ -22,7 +22,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
         FeedTableView.dataSource = self
         setupNavigationBar()
         getDocumentFromFirebase()
-        getUserInfo()
         view.addSubview(FeedTableView)
     }
 
@@ -60,40 +59,29 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
 
     func getDocumentFromFirebase() {
         fireStoreDatabase.collection("Document").order(by: "date", descending: true).addSnapshotListener { (snapshot, error) in
-            if let error = error {
-                self.showAlert(title: "Error", message: error.localizedDescription)
-            } else {
-                if let documents = snapshot?.documents {
-                    self.documentArray.removeAll(keepingCapacity: false)
-                    for document in documents {
-                        if let apiname = document.get("Apiname") as? String,
-                           let apiusername = document.get("Apiusername") as? String,
-                           let documentcomment = document.get("DocumentComment") as? String,
-                           let documentname = document.get("DocumentName") as? String,
-                           let date = document.get("date") as? Timestamp {
-                            let documentGet = DocumentGet(ApiName: apiname, ApiUsername: apiusername, DocumentName: documentname, DocumentComment: documentcomment, Date: date.dateValue())
-                            self.documentArray.append(documentGet)
-                        }
-                    }
-                    self.FeedTableView.reloadData()
-                }
-            }
-        }
-    }
-
-    func getUserInfo() {
-        if let currentUserEmail = Auth.auth().currentUser?.email {
-            fireStoreDatabase.collection("UserInfo").whereField("email", isEqualTo: currentUserEmail).getDocuments { (snapshot, error) in
                 if let error = error {
                     self.showAlert(title: "Error", message: error.localizedDescription)
-                } else if let document = snapshot?.documents.first,
-                          let username = document.get("username") as? String {
-                    UserSingleton.sharedUserInfo.email = currentUserEmail
-                    UserSingleton.sharedUserInfo.username = username
+                } else {
+                    
+                    if let documents = snapshot?.documents {
+                        self.documentArray.removeAll(keepingCapacity: false)
+                        for document in documents {
+                            if let apiname = document.get("Apiname") as? String,
+                               let apiusername = document.get("Apiusername") as? String,
+                               let documentcomment = document.get("DocumentComment") as? String,
+                               let documentname = document.get("DocumentName") as? String,
+                               let email = document.get("email") as? String,
+                               let date = document.get("date") as? Timestamp {
+                                let documentGet = DocumentGet(email: email, ApiName: apiname, ApiUsername: apiusername, DocumentName: documentname, DocumentComment: documentcomment, Date: date.dateValue())
+                                self.documentArray.append(documentGet)
+                            }
+                        }
+                        self.FeedTableView.reloadData()
+                    }
                 }
             }
         }
-    }
+    
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -122,6 +110,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINa
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         chosenDocument = documentArray[indexPath.row]
+        DocumentSingleton.sharedDocument.eMail = chosenDocument?.email ?? ""
         DocumentSingleton.sharedDocument.ApiName = chosenDocument?.ApiName ?? ""
         DocumentSingleton.sharedDocument.ApiUsername = chosenDocument?.ApiUsername ?? ""
         DocumentSingleton.sharedDocument.DocumentName = chosenDocument?.DocumentName ?? ""

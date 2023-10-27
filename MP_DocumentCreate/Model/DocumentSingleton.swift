@@ -10,6 +10,7 @@ class DocumentSingleton {//singleton bir sınıf var bu sınıftan bir obje olu�
     
     static let sharedDocument = DocumentSingleton()//bu sınıftan oluşturulan tek obje
     
+    var eMail = ""
     var ApiName = ""
     var ApiUsername = ""
     var DocumentName = ""
