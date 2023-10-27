@@ -4,172 +4,136 @@
 //
 //  Created by Rıdvan Dikmen on 11.10.2023.
 //
-
 import UIKit
 import Firebase
 
-class SingIn: UIViewController {
-    
-    
+class SingIn: UIViewController, AlertProtocol {
+
+    private let userNametext: UITextField = {
+        let username = UITextField()
+        username.placeholder = "UserName"
+        username.textAlignment = .center
+        username.translatesAutoresizingMaskIntoConstraints = false
+        return username
+    }()
+
+    private let emailText: UITextField = {
+        let email = UITextField()
+        email.placeholder = "Email"
+        email.textAlignment = .center
+        email.translatesAutoresizingMaskIntoConstraints = false
+        return email
+    }()
+
+    private let passwordText: UITextField = {
+        let password = UITextField()
+        password.placeholder = "Password"
+        password.textAlignment = .center
+        password.translatesAutoresizingMaskIntoConstraints = false
+        return password
+    }()
+
+    private let singInButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("SignIn", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        button.layer.cornerRadius = 25
+        button.backgroundColor = .green
+        button.addTarget(self, action: #selector(singInButtonClicked), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let singUpButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("SignUp", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        button.layer.cornerRadius = 25
+        button.backgroundColor = .green
+        button.addTarget(self, action: #selector(singUpButtonClicked), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
     }
-    
-    private let UserNametext : UITextField = {
-         let username = UITextField()
-         username.placeholder = "UserName"
-         username.textAlignment = .center
-         username.translatesAutoresizingMaskIntoConstraints = false
-         return username
-     }()
-     
-     private let EmailText : UITextField = {
-          let email = UITextField()
-         email.placeholder = "Email"
-         email.textAlignment = .center
-         email.translatesAutoresizingMaskIntoConstraints = false
-          return email
-      }()
-     
-     private let PasswordText : UITextField = {
-          let password = UITextField()
-         password.placeholder = "Password"
-         password.textAlignment = .center
-         password.translatesAutoresizingMaskIntoConstraints = false
-          return password
-      }()
-     
-     private let SingInButton : UIButton = {
-         let button = UIButton()
-         button.setTitle("SingIn", for: .normal)
-         button.setTitleColor(.blue, for: .normal)
-         button.layer.cornerRadius = 25
-         button.backgroundColor = .green
-         button.addTarget(self, action: #selector(SingInButtonClicked), for: .touchUpInside)
-         button.translatesAutoresizingMaskIntoConstraints = false
-         return button
-     }()
-     
-     private let SingUpButton : UIButton = {
-         let button = UIButton()
-         button.setTitle("SingUp", for: .normal)
-         button.setTitleColor(.blue, for: .normal)
-         button.layer.cornerRadius = 25
-         button.backgroundColor = .green
-         button.addTarget(self, action: #selector(SingUpButtonClicked), for: .touchUpInside)
-         button.translatesAutoresizingMaskIntoConstraints = false
-         return button
-     }()
-     
-     private func setupView(){
-         view.backgroundColor = .white
-         view.addSubview(UserNametext)
-         view.addSubview(EmailText)
-         view.addSubview(PasswordText)
-         view.addSubview(SingInButton)
-         view.addSubview(SingUpButton)
 
-         NSLayoutConstraint.activate([
-             
-             UserNametext.centerXAnchor.constraint(equalTo: view.centerXAnchor),//x ekseninde ortaya koy
-             UserNametext.heightAnchor.constraint(equalToConstant: 60),// yüksekliği belirledik
-             UserNametext.widthAnchor.constraint(equalToConstant: 200),// genişliği belirledik
-             UserNametext.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),//ekranın en üstünde ne kadar boşluk olucak
-         
-             EmailText.centerXAnchor.constraint(equalTo: view.centerXAnchor),//x ekseninde ortaya koy
-             EmailText.heightAnchor.constraint(equalToConstant: 60),// yüksekliği belirledik
-             EmailText.widthAnchor.constraint(equalToConstant: 200),// genişliği belirledik
-             EmailText.topAnchor.constraint(equalTo: UserNametext.topAnchor, constant: 100),//ekranın en üstünde ne kadar boşluk olucak
-         
-             PasswordText.centerXAnchor.constraint(equalTo: view.centerXAnchor),//x ekseninde ortaya koy
-             PasswordText.heightAnchor.constraint(equalToConstant: 60),// yüksekliği belirledik
-             PasswordText.widthAnchor.constraint(equalToConstant: 200),// genişliği belirledik
-             PasswordText.topAnchor.constraint(equalTo: EmailText.topAnchor, constant: 100),//ekranın en üstünde ne kadar boşluk olucak
-             
-             SingInButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10),//x ekseninde ortaya koy
-             SingInButton.heightAnchor.constraint(equalToConstant: 50),// yüksekliği belirledik
-             SingInButton.widthAnchor.constraint(equalToConstant: 100),// genişliği belirledik
-             SingInButton.topAnchor.constraint(equalTo: PasswordText.topAnchor, constant: 100),
-             
-             SingUpButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
-             SingUpButton.heightAnchor.constraint(equalToConstant: 50),// yüksekliği belirledik
-             SingUpButton.widthAnchor.constraint(equalToConstant: 100),// genişliği belirledik
-             SingUpButton.topAnchor.constraint(equalTo: PasswordText.topAnchor, constant: 100)
-    
-         ])
-         
-     }
-     
-     @objc func SingInButtonClicked(sender: UIButton!){
-     
-         if EmailText.text != "" && PasswordText.text != ""{
-             
-             Auth.auth().signIn(withEmail: EmailText.text!, password: PasswordText.text!) { authdata, error in // mail ve şifre kontrolü yaptığımız firebase kodu
-                 if error  != nil{
-                     self.makeAlert(title: "Error", message: error?.localizedDescription ?? "ERROR")
-                 }
-                 else{
-                     
-                 
-                     
-                
-                     let feed = FeedVC()
-                     feed.modalPresentationStyle = .fullScreen
-                     self.present(feed, animated: true, completion: nil)
-                 
-                 }
-             }
+    private func setupView() {
+        view.backgroundColor = .white
+        view.addSubview(userNametext)
+        view.addSubview(emailText)
+        view.addSubview(passwordText)
+        view.addSubview(singInButton)
+        view.addSubview(singUpButton)
 
-             
-         }
-         else{
-             makeAlert(title: "error", message: "email/password is null")
-         }
-       
-     }
-     
-     
-     
-     @objc func SingUpButtonClicked(sender: UIButton!){
-     
-         if EmailText.text != "" && PasswordText.text != "" && UserNametext.text != ""{
-             Auth.auth().createUser(withEmail: EmailText.text!, password: PasswordText.text!) { authdata, error in// kullanıcı oluşturmak için gerekli metod
-                 if error  != nil{
-                     self.makeAlert(title: "Error", message: error?.localizedDescription ?? "ERROR")//error mesajı firebasein kendi mesajını yazmak için
-                 }
-                 else{
-                     
-                     let fireStore = Firestore.firestore()//firesotore değişkeni oluşturduk
-                                         
-                     let userDictionary = ["email" : self.EmailText.text!,"username": self.UserNametext.text!] as [String : Any]//aldığımız verileri keylerle oluşturduk
-                                         
-                     fireStore.collection("UserInfo").addDocument(data: userDictionary) { (error) in//database collection oluşturduk ve içine aldığımız verileri koyduk
-                         if error != nil {
-                             self.makeAlert(title: "error", message: "Networkerror")
-                         }
-                     }
-                         let feed = FeedVC()
-                         feed.modalPresentationStyle = .fullScreen
-                         self.present(feed, animated: true, completion: nil)
-                 }
-             }
-         }
-         else{
-             makeAlert(title: "error", message: "email/password is null")
-         }
-                 
-     }
-     
-     @objc func makeAlert(title: String,message:String){
-         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-         let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
-         alert.addAction(okButton)
-         self.present(alert, animated: true,completion: nil)
-     }
-    
+        NSLayoutConstraint.activate([
+            userNametext.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            userNametext.heightAnchor.constraint(equalToConstant: 60),
+            userNametext.widthAnchor.constraint(equalToConstant: 200),
+            userNametext.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+
+            emailText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emailText.heightAnchor.constraint(equalToConstant: 60),
+            emailText.widthAnchor.constraint(equalToConstant: 200),
+            emailText.topAnchor.constraint(equalTo: userNametext.topAnchor, constant: 100),
+
+            passwordText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            passwordText.heightAnchor.constraint(equalToConstant: 60),
+            passwordText.widthAnchor.constraint(equalToConstant: 200),
+            passwordText.topAnchor.constraint(equalTo: emailText.topAnchor, constant: 100),
+
+            singInButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10),
+            singInButton.heightAnchor.constraint(equalToConstant: 50),
+            singInButton.widthAnchor.constraint(equalToConstant: 100),
+            singInButton.topAnchor.constraint(equalTo: passwordText.topAnchor, constant: 100),
+
+            singUpButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
+            singUpButton.heightAnchor.constraint(equalToConstant: 50),
+            singUpButton.widthAnchor.constraint(equalToConstant: 100),
+            singUpButton.topAnchor.constraint(equalTo: passwordText.topAnchor, constant: 100)
+        ])
+    }
+
+    @objc func singInButtonClicked(sender: UIButton!) {
+        if emailText.text != "" && passwordText.text != "" {
+            Auth.auth().signIn(withEmail: emailText.text!, password: passwordText.text!) { authData, error in
+                if error != nil {
+                    self.showAlert(title: "Error", message: error?.localizedDescription ?? "ERROR")
+                } else {
+                    let feed = FeedVC()
+                    feed.modalPresentationStyle = .fullScreen
+                    self.present(feed, animated: true, completion: nil)
+                }
+            }
+        } else {
+            showAlert(title: "Error", message: "Email/Password is empty")
+        }
+    }
+
+    @objc func singUpButtonClicked(sender: UIButton!) {
+        if emailText.text != "" && passwordText.text != "" && userNametext.text != "" {
+            Auth.auth().createUser(withEmail: emailText.text!, password: passwordText.text!) { authData, error in
+                if error != nil {
+                    self.showAlert(title: "Error", message: error?.localizedDescription ?? "ERROR")
+                } else {
+                    let firestore = Firestore.firestore()
+                    let userDictionary = ["email": self.emailText.text!, "username": self.userNametext.text!] as [String: Any]
+                    firestore.collection("UserInfo").addDocument(data: userDictionary) { error in
+                        if error != nil {
+                            self.showAlert(title: "Error", message: "Network Error")
+                        }
+                    }
+                    let feed = FeedVC()
+                    feed.modalPresentationStyle = .fullScreen
+                    self.present(feed, animated: true, completion: nil)
+                }
+            }
+        } else {
+            showAlert(title: "Error", message: "Email/Password/Username is empty")
+        }
+    }
 }
 
     
