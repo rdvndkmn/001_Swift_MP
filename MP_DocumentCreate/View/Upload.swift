@@ -191,38 +191,46 @@ class UploadVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         view.addSubview(DocumentCommentText)
         view.addSubview(DataTableView)
         let width = view.bounds.width
-        let height = view.bounds.height
+        //let height = view.bounds.height
+        
         NSLayoutConstraint.activate([
             UsernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             UsernameLabel.heightAnchor.constraint(equalToConstant: 60),
             UsernameLabel.widthAnchor.constraint(equalToConstant: 200),
             UsernameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            
             DocumentNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             DocumentNameLabel.heightAnchor.constraint(equalToConstant: 60),
             DocumentNameLabel.widthAnchor.constraint(equalToConstant: 200),
             DocumentNameLabel.topAnchor.constraint(equalTo: UsernameLabel.topAnchor, constant: 100),
+            
             DocumentCommentLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             DocumentCommentLabel.heightAnchor.constraint(equalToConstant: 60),
             DocumentCommentLabel.widthAnchor.constraint(equalToConstant: 200),
             DocumentCommentLabel.topAnchor.constraint(equalTo: DocumentNameLabel.topAnchor, constant: 100),
+            
             DataNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             DataNameLabel.heightAnchor.constraint(equalToConstant: 60),
             DataNameLabel.widthAnchor.constraint(equalToConstant: 200),
             DataNameLabel.topAnchor.constraint(equalTo: DocumentCommentLabel.topAnchor, constant: 100),
+            
             DataCommentLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             DataCommentLabel.heightAnchor.constraint(equalToConstant: 60),
             DataCommentLabel.widthAnchor.constraint(equalToConstant: 200),
             DataCommentLabel.topAnchor.constraint(equalTo: DataNameLabel.topAnchor, constant: 100),
+            
             DocumentNameText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             DocumentNameText.heightAnchor.constraint(equalToConstant: 60),
             DocumentNameText.widthAnchor.constraint(equalToConstant: 200),
             DocumentNameText.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            
             DocumentCommentText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             DocumentCommentText.heightAnchor.constraint(equalToConstant: 60),
             DocumentCommentText.widthAnchor.constraint(equalToConstant: 200),
             DocumentCommentText.topAnchor.constraint(equalTo: DocumentNameText.topAnchor, constant: 100),
+            
             DataTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            DataTableView.heightAnchor.constraint(equalToConstant: height),
+            DataTableView.heightAnchor.constraint(equalToConstant: 550),
             DataTableView.widthAnchor.constraint(equalToConstant: width),
             DataTableView.topAnchor.constraint(equalTo: DocumentCommentText.topAnchor, constant: 100)
         ])

@@ -9,34 +9,42 @@ import XCTest
 
 final class MP_DocumentCreateUITests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testDocumentApp() throws {
         
         let app = XCUIApplication()
         app.launch()
+        let emailTextField = app.textFields["Email"]
+        let passwordTextField = app.textFields["Password"]
+        let siginButton = app.buttons["SignIn"]
+        let singupButton = app.buttons["SignUp"]
+        let navigationBarsQuery = app.navigationBars
+        let addButton = navigationBarsQuery.buttons["Add"]
+        let documentNameTextField = app.textFields["Document Name"]
+        let documentCommentTextField = app.textFields["Document Comment"]
+        let savebutton = navigationBarsQuery.buttons["Save"]
+        let logoutButton = navigationBarsQuery.buttons["LogOut"]
+        let backButton = navigationBarsQuery.buttons["Back"]
+        let tablesQuery = app.tables
+        
+        let api = tablesQuery/*@START_MENU_TOKEN@*/.cells.containing(.staticText, identifier:"Patricia Lebsack")/*[[".cells.containing(.staticText, identifier:\"Karianne\")",".cells.containing(.staticText, identifier:\"Patricia Lebsack\")"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element(boundBy: 0)
+        let feed = tablesQuery/*@START_MENU_TOKEN@*/.cells.containing(.staticText, identifier:"10/30/2023, 10:03 PM")/*[[".cells.containing(.staticText, identifier:\"Deneme\")",".cells.containing(.staticText, identifier:\"10\/30\/2023, 10:03 PM\")"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element(boundBy: 0)
+        
+        //logoutButton.tap()
+        emailTextField.tap()
+        emailTextField.typeText("r@gmail.com")
+        passwordTextField.tap()
+        passwordTextField.typeText("123456")
+        singupButton.tap()
+        addButton.tap()
+        documentNameTextField.tap()
+        documentNameTextField.typeText("Deneme")
+        documentCommentTextField.tap()
+        documentCommentTextField.typeText("Deneme")
+        api.tap()
+        feed.tap()
+        
+        
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
-    }
 }
